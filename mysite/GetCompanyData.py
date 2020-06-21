@@ -41,15 +41,14 @@ class GetCompanyData:
         self.stockInfoDf = companyDataList[0] #Df is datafram
         
         for i in self.stockInfoDf.index:
-            name = self.stockInfoDf.loc[i, '회사명']
-            code = self.stockInfoDf.loc[i, '종목코드']
-            buz = self.stockInfoDf.loc[i, '업종']
-            prod = self.stockInfoDf.loc[i, '주요제품']
-            lsd = self.stockInfoDf.loc[i, '상장일']
-            ceo = self.stockInfoDf.loc[i, '대표자명']
-            site = self.stockInfoDf.loc[i, '홈페이지']
-            local = self.stockInfoDf.loc[i, '지역']
-            CompanyData(companyName = name).save()
+            CompanyData(companyName = self.stockInfoDf.loc[i, '회사명'],\
+            companyStockCode = self.stockInfoDf.loc[i, '종목코드'],\
+            companyBuz = self.stockInfoDf.loc[i, '업종'],\
+            companyProd = self.stockInfoDf.loc[i, '주요제품'],\
+            companyListStartDate = self.stockInfoDf.loc[i, '상장일'],\
+            companyCEO = self.stockInfoDf.loc[i, '대표자명'],\
+            companySite = self.stockInfoDf.loc[i, '홈페이지'],\
+            companyLocal = self.stockInfoDf.loc[i, '지역']).save()
                         
 if __name__ == '__main__':
     parsedData = GetCompanyData()
