@@ -52,4 +52,4 @@ class GetCompanyData:
             CompanyData(companyName = name).save()
                         
 if __name__ == '__main__':
-    companyData = GetCompanyData()
+    parsedData = GetCompanyData()
