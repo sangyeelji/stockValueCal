@@ -16,23 +16,31 @@ class GetCompanyFinacialData:
     'B050': 'checkbox',\
     'B090': 'checkbox',\
     'acntgType': 'I',\
-    'arrIsurCd': '00593',\
+    'arrIsurCd': '',\
     'comAbbrv': '',\
     'fininfotype': 'finstat',\
     'finsearchtype': 'finstat',\
     'fiscalgubun': 'accntclosing',\
-    'fiscalyear': '2019',\
+    'fiscalyear': '',\
     'forward': 'list',\
     'method': 'searchFinancialInfoOfSomeCorps',\
     'orderMode': 'A080',\
     'orderStat': 'D',\
     'searchCodeType':'',\
-    'searchCorpName': '005930',\
+    'searchCorpName': '',\
     'titleofaccnt': 'A080|A110|A160|A170|A180|A190|A200'}
     
-    def __init__(self):
+    def __init__(self,stockCode,year):
+        GetCompanyFinacialData.__POSTDATA['arrIsurCd'] = stockCode
+        GetCompanyFinacialData.__POSTDATA['fiscalyear'] = year
+        print(GetCompanyFinacialData.__POSTDATA)
         res = requests.post(GetCompanyFinacialData.__URL,data = GetCompanyFinacialData.__POSTDATA)
-        print(res.text)
+        
+        companyFinacialDataList = pandas.read_html(res.text)
+        self.financialDataInfoDf = companyFinacialDataList[0]
+        self.financialDataInfoDf.columns = ['index','CompanyName','자산총계','부채총계','자본총계','매출액','영업이익','법인세차감전계속사업이익','당기순이익']
+        for i in self.financialDataInfoDf.index:
+            print(self.financialDataInfoDf.loc[i])
         
 if __name__ == '__main__':
-    parsedData = GetCompanyFinacialData()
+    parsedData = GetCompanyFinacialData('00593','1995')
