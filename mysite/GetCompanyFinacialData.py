@@ -39,8 +39,8 @@ class GetCompanyFinacialData:
         companyFinacialDataList = pandas.read_html(res.text)
         self.financialDataInfoDf = companyFinacialDataList[0]
         self.financialDataInfoDf.columns = ['index','CompanyName','자산총계','부채총계','자본총계','매출액','영업이익','법인세차감전계속사업이익','당기순이익']
-        for i in self.financialDataInfoDf.index:
-            print(self.financialDataInfoDf.loc[i])
+
+        print(self.financialDataInfoDf.loc[0,'CompanyName'])
         
 if __name__ == '__main__':
-    parsedData = GetCompanyFinacialData('00593','1995')
+    parsedData = GetCompanyFinacialData('00593','1996')
