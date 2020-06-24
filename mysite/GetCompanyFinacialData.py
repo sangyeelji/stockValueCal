@@ -29,18 +29,20 @@ class GetCompanyFinacialData:
     'searchCodeType':'',\
     'searchCorpName': '',\
     'titleofaccnt': 'A080|A110|A160|A170|A180|A190|A200'}
+    __START_YEAR = 1996
+    __END_YEAR = 2020
     
-    def __init__(self,stockCode,year):
+    def __init__(self,stockCode):
         GetCompanyFinacialData.__POSTDATA['arrIsurCd'] = stockCode
-        GetCompanyFinacialData.__POSTDATA['fiscalyear'] = year
-        print(GetCompanyFinacialData.__POSTDATA)
-        res = requests.post(GetCompanyFinacialData.__URL,data = GetCompanyFinacialData.__POSTDATA)
         
-        companyFinacialDataList = pandas.read_html(res.text)
-        self.financialDataInfoDf = companyFinacialDataList[0]
-        self.financialDataInfoDf.columns = ['index','CompanyName','자산총계','부채총계','자본총계','매출액','영업이익','법인세차감전계속사업이익','당기순이익']
+        for i in range(GetCompanyFinacialData.__START_YEAR,GetCompanyFinacialData.__END_YEAR):
+            GetCompanyFinacialData.__POSTDATA['fiscalyear'] = str(i)
+            res = requests.post(GetCompanyFinacialData.__URL,data = GetCompanyFinacialData.__POSTDATA)
+            companyFinacialDataList = pandas.read_html(res.text)
+            self.financialDataInfoDf = companyFinacialDataList[0]
+            self.financialDataInfoDf.columns = ['index','CompanyName','자산총계','부채총계','자본총계','매출액','영업이익','법인세차감전계속사업이익','당기순이익']
+            print(self.financialDataInfoDf.loc[0])
 
-        print(self.financialDataInfoDf.loc[0,'CompanyName'])
         
 if __name__ == '__main__':
-    parsedData = GetCompanyFinacialData('00593','1996')
+    parsedData = GetCompanyFinacialData('00593')
