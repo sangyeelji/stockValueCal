@@ -1,5 +1,13 @@
 import pandas
 import requests
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE","mysite.settings")
+
+
+import django
+django.setup()
+
+from companyFinData.models import CompanyFinData
 
 
 class GetCompanyFinacialData:
@@ -41,7 +49,17 @@ class GetCompanyFinacialData:
             companyFinacialDataList = pandas.read_html(res.text)
             self.financialDataInfoDf = companyFinacialDataList[0]
             self.financialDataInfoDf.columns = ['index','CompanyName','자산총계','부채총계','자본총계','매출액','영업이익','법인세차감전계속사업이익','당기순이익']
-            print(self.financialDataInfoDf.loc[0])
+            
+            CompanyFinData(companyName = self.financialDataInfoDf.loc[0,'CompanyName'],\
+            companyFinYear = str(i),\
+            companyStockCode = stockCode,\
+            companyTotalAssets = self.financialDataInfoDf.loc[0,'자산총계'],\
+            companyTotalDebt = self.financialDataInfoDf.loc[0,'부채총계'],\
+            comapnyTotalCapital = self.financialDataInfoDf.loc[0,'자본총계'],\
+            companyTotalSales = self.financialDataInfoDf.loc[0,'매출액'],\
+            companyTotalBuzProfits = self.financialDataInfoDf.loc[0,'영업이익'],\
+            companyTotalIncomeBeforeTax = self.financialDataInfoDf.loc[0,'법인세차감전계속사업이익'],\
+            companyTotalNetIncome = self.financialDataInfoDf.loc[0,'당기순이익']).save()
 
         
 if __name__ == '__main__':
